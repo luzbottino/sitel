@@ -47,10 +47,9 @@ public class HeaderV2 implements Serializable {
     @Column(name = "COD_CGC_CLIENTE", length = 15)
     private String codCgcCliente;
     @Column(name = "COD_IDENT_CONTA_UNICA", length = 15)
-    private String codIdentContaUnica;
-    @Temporal(value = TemporalType.DATE)
-    @Column(name = "MES_ANO_REF")
-    private Date mesAnoRef;
+    private String codIdentContaUnica;    
+    @Column(name = "MES_ANO_REF", length = 10)
+    private String mesAnoRef;
     @Temporal(value = TemporalType.DATE)
     @Column(name = "DTA_VENCIMENTO")
     private Date dtaVencimento;
@@ -141,11 +140,11 @@ public class HeaderV2 implements Serializable {
         this.codIdentContaUnica = codIdentContaUnica;
     }
 
-    public Date getMesAnoRef() {
+    public String getMesAnoRef() {
         return mesAnoRef;
     }
 
-    public void setMesAnoRef(Date mesAnoRef) {
+    public void setMesAnoRef(String mesAnoRef) {
         this.mesAnoRef = mesAnoRef;
     }
 

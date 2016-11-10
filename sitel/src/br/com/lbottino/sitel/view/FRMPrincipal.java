@@ -1,4 +1,5 @@
 /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,11 +8,12 @@ package br.com.lbottino.sitel.view;
 
 import br.com.lbottino.sitel.dao.HeaderV2DAO;
 import br.com.lbottino.sitel.model.HeaderV2;
+import br.com.lbottino.sitel.model.ResumoV2;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -268,11 +270,13 @@ public class FRMPrincipal extends javax.swing.JFrame {
             if (line.substring(164, 168).equals("V3R0")) {
 
             } else {
-//                while(line != null){
-                if (line.substring(0, 1).equals("0")) {
-                    buildHeaderV2(line);
+                while (line != null) {
+                    if (line.substring(0, 1).equals("0")) {
+                        buildHeaderV2(line);
+                    } else if (line.substring(0, 1).equals("1")) {
+                        buildResumo(line);
+                    }
                 }
-//                }
             }
 
         } catch (IOException ex) {
@@ -291,30 +295,58 @@ public class FRMPrincipal extends javax.swing.JFrame {
         headerV2.setNomCliente(header.substring(52, 93));
         headerV2.setCodCgcCliente(header.substring(93, 108));
         headerV2.setCodIdentContaUnica(header.substring(108, 123));
-        headerV2.setMesAnoRef(parseToDate(header.substring(123, 129)));
+        headerV2.setMesAnoRef(header.substring(123, 129));
         headerV2.setDtaVencimento(parseToDate(header.substring(133, 141)));
         headerV2.setDtaEmissao(parseToDate(header.substring(141, 149)));
 
         System.out.println(headerV2.toString());
+
+    }
+
+    private void buildResumo(String resumo) throws ParseException {
+        ResumoV2 resumoV2 = new ResumoV2();
         
-        new HeaderV2DAO().save(headerV2);
+        resumoV2.setCodTipoRegistro(resumo.substring(0, 1));
+        resumoV2.setCodControleGravacao(resumo.substring(1, 13));
+        resumoV2.setCodIdentContaUnica(resumo.substring(13, 28));
+        resumoV2.setMesAnoRef(resumo.substring(28, 38));
+        resumoV2.setDtaVencimento(parseToDate(resumo.substring(38, 46)));
+        resumoV2.setDtaEmissao(parseToDate(resumo.substring(46, 54)));
+        resumoV2.setCodIdentUnicoRecurso(resumo.substring(54, 79));
+        resumoV2.setCodCnlRecursoRef(resumo.indexOf(resumo.substring(79, 84)));
+        resumoV2.setNomLocalidade(resumo.substring(84, 109));
+        resumoV2.setCodDdd(resumo.substring(109, 111));
+        resumoV2.setCodTelefone(resumo.substring(111, 121));
+        resumoV2.setCodTipoServico(resumo.substring(121, 125));
+        resumoV2.setDesTipoServico(resumo.substring(125, 160));
+        resumoV2.setNomRecurso(resumo.substring(160, 175));
+        resumoV2.setCodDegrau(resumo.substring(175, 177));
+        resumoV2.setQtdVelocidade(resumo.substring(177, 182));
+        resumoV2.setCodUnVelocidadeRecurso(resumo.substring(182, 186));
+        resumoV2.setDtaInicioAss(parseToDate(resumo.substring(186, 194)));
+        resumoV2.setDtaFimAss(parseToDate(resumo.substring(194, 202)));
+        resumoV2.setDtaInicioServico(parseToDate(resumo.substring(202, 210)));
+        resumoV2.setDtaFimServico(parseToDate(resumo.substring(210, 218)));
+        resumoV2.setCodUnConsumo(resumo.substring(218, 223));
+        resumoV2.setQtdConsumo(resumo.indexOf(resumo.substring(223, 230)));
+        resumoV2.setCodSinalValConsumo(resumo.charAt(231));
+        resumoV2.setValConsumo(parseToBigDecimal(resumo.substring(231, 246)));
+        
     }
 
     private Date parseToDate(String dateFormat) throws ParseException {
-        Date date = null;
-        if (dateFormat.length() == 8) {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            String year = dateFormat.substring(0, 4);
-            String month = dateFormat.substring(4, 6);
-            String day = dateFormat.substring(6, 8);
-            date = format.parse(day + "/" + month + "/" + year);
-        } else {
-            SimpleDateFormat format = new SimpleDateFormat("MM/yyyy");
-            String month = dateFormat.substring(0, 2);
-            String year = dateFormat.substring(2, 6);
-            date = format.parse(month + "/" + year);
-        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
+        String year = dateFormat.substring(0, 4);
+        String month = dateFormat.substring(4, 6);
+        String day = dateFormat.substring(6, 8);
+        Date date = format.parse(year + "-" + month + "-" + day);
         return date;
+
+    }
+
+    private BigDecimal parseToBigDecimal(String bigDecimalFormat) {
+        return null;
     }
 
 }
