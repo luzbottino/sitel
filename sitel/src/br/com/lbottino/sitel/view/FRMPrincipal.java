@@ -1,5 +1,5 @@
 /*
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,6 +7,7 @@
 package br.com.lbottino.sitel.view;
 
 import br.com.lbottino.sitel.dao.HeaderV2DAO;
+import br.com.lbottino.sitel.dao.ResumoV2DAO;
 import br.com.lbottino.sitel.model.HeaderV2;
 import br.com.lbottino.sitel.model.ResumoV2;
 import java.io.BufferedReader;
@@ -276,6 +277,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
                     } else if (line.substring(0, 1).equals("1")) {
                         buildResumo(line);
                     }
+                    line = bufferedReader.readLine();
                 }
             }
 
@@ -305,7 +307,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
     private void buildResumo(String resumo) throws ParseException {
         ResumoV2 resumoV2 = new ResumoV2();
-        
+
         resumoV2.setCodTipoRegistro(resumo.substring(0, 1));
         resumoV2.setCodControleGravacao(resumo.substring(1, 13));
         resumoV2.setCodIdentContaUnica(resumo.substring(13, 28));
@@ -313,7 +315,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
         resumoV2.setDtaVencimento(parseToDate(resumo.substring(38, 46)));
         resumoV2.setDtaEmissao(parseToDate(resumo.substring(46, 54)));
         resumoV2.setCodIdentUnicoRecurso(resumo.substring(54, 79));
-        resumoV2.setCodCnlRecursoRef(resumo.indexOf(resumo.substring(79, 84)));
+        resumoV2.setCodCnlRecursoRef(Integer.parseInt(resumo.substring(79, 84)));
         resumoV2.setNomLocalidade(resumo.substring(84, 109));
         resumoV2.setCodDdd(resumo.substring(109, 111));
         resumoV2.setCodTelefone(resumo.substring(111, 121));
@@ -328,25 +330,45 @@ public class FRMPrincipal extends javax.swing.JFrame {
         resumoV2.setDtaInicioServico(parseToDate(resumo.substring(202, 210)));
         resumoV2.setDtaFimServico(parseToDate(resumo.substring(210, 218)));
         resumoV2.setCodUnConsumo(resumo.substring(218, 223));
-        resumoV2.setQtdConsumo(resumo.indexOf(resumo.substring(223, 230)));
-        resumoV2.setCodSinalValConsumo(resumo.charAt(231));
-        resumoV2.setValConsumo(parseToBigDecimal(resumo.substring(231, 246)));
-        
+        resumoV2.setQtdConsumo(Integer.parseInt(resumo.substring(223, 230)));
+        resumoV2.setCodSinalValConsumo(resumo.charAt(230));
+        resumoV2.setValConsumo(parseToBigDecimal(resumo.substring(231, 244)));
+        resumoV2.setCodSinalAss(resumo.charAt(244));
+        resumoV2.setValAssinatura(parseToBigDecimal(resumo.substring(245, 258)));
+        resumoV2.setPctAliquota(resumo.substring(258, 260));
+        resumoV2.setCodSinalIcms(resumo.charAt(260));
+        resumoV2.setValIcms(parseToBigDecimal(resumo.substring(261, 274)));
+        resumoV2.setCodSinalValTotalOutrosImpostos(resumo.charAt(274));
+        resumoV2.setValTotalImpostos(parseToBigDecimal(resumo.substring(275, 288)));
+        resumoV2.setCodNotaFiscal(resumo.substring(288, 300));
+        resumoV2.setCodSinalValConta(resumo.charAt(300));
+        resumoV2.setValConta(parseToBigDecimal(resumo.substring(301, 314)));
+
+        System.out.println(resumoV2.toString());
+
     }
 
     private Date parseToDate(String dateFormat) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
-        String year = dateFormat.substring(0, 4);
-        String month = dateFormat.substring(4, 6);
-        String day = dateFormat.substring(6, 8);
-        Date date = format.parse(year + "-" + month + "-" + day);
-        return date;
+        if (!dateFormat.equals("00000000")) {
+            String year = dateFormat.substring(0, 4);
+            String month = dateFormat.substring(4, 6);
+            String day = dateFormat.substring(6, 8);
+            Date date = format.parse(year + "-" + month + "-" + day);
+            return date;
+        }
+        return null;
 
     }
 
     private BigDecimal parseToBigDecimal(String bigDecimalFormat) {
-        return null;
+        String beforeComma = bigDecimalFormat.substring(0, 11);
+        String afterComma = bigDecimalFormat.substring(11, 13);
+
+        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
+
+        return bigDecimal;
     }
 
 }
