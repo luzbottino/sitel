@@ -6,8 +6,7 @@
  */
 package br.com.lbottino.sitel.view;
 
-import br.com.lbottino.sitel.dao.HeaderV2DAO;
-import br.com.lbottino.sitel.dao.ResumoV2DAO;
+import br.com.lbottino.sitel.model.EnderecoV2;
 import br.com.lbottino.sitel.model.HeaderV2;
 import br.com.lbottino.sitel.model.ResumoV2;
 import java.io.BufferedReader;
@@ -276,6 +275,8 @@ public class FRMPrincipal extends javax.swing.JFrame {
                         buildHeaderV2(line);
                     } else if (line.substring(0, 1).equals("1")) {
                         buildResumo(line);
+                    }else if (line.substring(0, 1).equals("2")){
+                        buildEndereco(line);
                     }
                     line = bufferedReader.readLine();
                 }
@@ -348,6 +349,27 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
     }
 
+    private void buildEndereco(String endereco) {        
+        EnderecoV2 enderecoV2 = new EnderecoV2();
+        
+        //enderecoV2.set(endereco.substring(WIDTH, WIDTH));
+        enderecoV2.setCodTipoRegistro(endereco.substring(0, 1));
+        enderecoV2.setCodControleGravacao(endereco.substring(1, 13));
+        enderecoV2.setCodIdentUnicoRecurso(endereco.substring(13, 38));
+        enderecoV2.setCodDdd(endereco.substring(38, 40));
+        enderecoV2.setCodTelefone(endereco.substring(40, 50));
+        enderecoV2.setNomRecurso(endereco.substring(50, 65));
+        enderecoV2.setCodCnlEnderecoA(endereco.substring(65, 70));
+        enderecoV2.setNomLocalidadeA(endereco.substring(70, 90));
+        enderecoV2.setCodUfLocalidadeA(endereco.substring(90, 92));
+        enderecoV2.setDescEnderecoA(endereco.substring(92, 122));
+        enderecoV2.setNumEnderecoA(endereco.substring(122, 127));
+        enderecoV2.setDescComplementoA(endereco.substring(127, 137));
+        
+        System.out.println(enderecoV2.toString());
+        
+    }
+    
     private Date parseToDate(String dateFormat) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
@@ -370,5 +392,6 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
         return bigDecimal;
     }
+
 
 }

@@ -23,8 +23,8 @@ import javax.persistence.TemporalType;
  * @author pig
  */
 @Entity
-@Table(name = "BILHETE_V2")
-public class BilheteV2 implements Serializable {
+@Table(name = "SERVICO_V2")
+public class ServicoV2 implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,8 +53,8 @@ public class BilheteV2 implements Serializable {
     @Column(name = "COD_DEGRAU", length = 2)
     private String codDegrau;
     @Temporal(value = TemporalType.DATE)
-    @Column(name = "DTA_LIGACAO")
-    private Date dtaLigacao;
+    @Column(name = "DTA_SERVICO")
+    private Date dtaServico;
     @Column(name = "COD_CNL_DESTINO")
     private Integer codCnlDestino;
     @Column(name = "NOM_LOCALIDADE_DESTINO", length = 25)
@@ -77,31 +77,25 @@ public class BilheteV2 implements Serializable {
     private String codConjugadoNumOrigem;
     @Column(name = "NUM_DURACAO_LIGACAO", precision = 5, scale = 1)
     private BigDecimal numDuracaoLigacao;
-    @Column(name = "NOM_CATEGORIA", length = 3)
-    private String nomCategoria;
-    @Column(name = "DES_CATEGORIA", length = 50)
-    private String descCategoria;
     @Temporal(value = TemporalType.TIME)
     @Column(name = "HOR_LIGACAO")
     private Date horLigacao;
-    @Column(name = "COD_TIPO_CHAMADA", length = 1)
-    private String codTipoChamada;
-    @Column(name = "COD_GRUPO_HORARIO_TARIFARIO", length = 1)
-    private String codGrupoHorarioTarifario;
-    @Column(name = "DES_GRUPO_HORARIO_TARIFARIO", length = 25)
-    private String descGrupoHorarioTarifario;
-    @Column(name = "COD_DEGRAU_LIGACAO")
-    private Integer codDegrauLigacao;
+    @Column(name = "NOM_GRUPO_CATEGORIA", length = 3)
+    private String nomGrupoCategoria;
+    @Column(name = "DESC_GRUPO_CATEGORIA", length = 30)
+    private String descGrupoCategoria;
+    @Column(name = "NOM_CATEGORIA", length = 3)
+    private String nomCategoria;
+    @Column(name = "DESC_CATEGORIA", length = 40)
+    private String descCategoria;
     @Column(name = "COD_SINAL_VAL_LIGACAO")
     private char codSinalValLigacao;
-    @Column(name = "VAL_ALIQUOTA_ICMS", precision = 3, scale = 2)
-    private BigDecimal valAliquotaIcms;
-    @Column(name = "VAL_LIGACAO_COM_IMPOSTO", precision = 11, scale = 2)
-    private BigDecimal valLigacaoComImposto;
+    @Column(name = "VAL_LIGACAO", precision = 11, scale = 2)
+    private BigDecimal valLigacao;
     @Column(name = "COD_CLASSE_SERVICO")
     private Integer codClasseServico;
 
-    public BilheteV2() {
+    public ServicoV2() {
     }
 
     public Integer getId() {
@@ -192,12 +186,12 @@ public class BilheteV2 implements Serializable {
         this.codDegrau = codDegrau;
     }
 
-    public Date getDtaLigacao() {
-        return dtaLigacao;
+    public Date getDtaServico() {
+        return dtaServico;
     }
 
-    public void setDtaLigacao(Date dtaLigacao) {
-        this.dtaLigacao = dtaLigacao;
+    public void setDtaServico(Date dtaServico) {
+        this.dtaServico = dtaServico;
     }
 
     public Integer getCodCnlDestino() {
@@ -288,6 +282,30 @@ public class BilheteV2 implements Serializable {
         this.numDuracaoLigacao = numDuracaoLigacao;
     }
 
+    public Date getHorLigacao() {
+        return horLigacao;
+    }
+
+    public void setHorLigacao(Date horLigacao) {
+        this.horLigacao = horLigacao;
+    }
+
+    public String getNomGrupoCategoria() {
+        return nomGrupoCategoria;
+    }
+
+    public void setNomGrupoCategoria(String nomGrupoCategoria) {
+        this.nomGrupoCategoria = nomGrupoCategoria;
+    }
+
+    public String getDescGrupoCategoria() {
+        return descGrupoCategoria;
+    }
+
+    public void setDescGrupoCategoria(String descGrupoCategoria) {
+        this.descGrupoCategoria = descGrupoCategoria;
+    }
+
     public String getNomCategoria() {
         return nomCategoria;
     }
@@ -304,46 +322,6 @@ public class BilheteV2 implements Serializable {
         this.descCategoria = descCategoria;
     }
 
-    public Date getHorLigacao() {
-        return horLigacao;
-    }
-
-    public void setHorLigacao(Date horLigacao) {
-        this.horLigacao = horLigacao;
-    }
-
-    public String getCodTipoChamada() {
-        return codTipoChamada;
-    }
-
-    public void setCodTipoChamada(String codTipoChamada) {
-        this.codTipoChamada = codTipoChamada;
-    }
-
-    public String getCodGrupoHorarioTarifario() {
-        return codGrupoHorarioTarifario;
-    }
-
-    public void setCodGrupoHorarioTarifario(String codGrupoHorarioTarifario) {
-        this.codGrupoHorarioTarifario = codGrupoHorarioTarifario;
-    }
-
-    public String getDescGrupoHorarioTarifario() {
-        return descGrupoHorarioTarifario;
-    }
-
-    public void setDescGrupoHorarioTarifario(String descGrupoHorarioTarifario) {
-        this.descGrupoHorarioTarifario = descGrupoHorarioTarifario;
-    }
-
-    public Integer getCodDegrauLigacao() {
-        return codDegrauLigacao;
-    }
-
-    public void setCodDegrauLigacao(Integer codDegrauLigacao) {
-        this.codDegrauLigacao = codDegrauLigacao;
-    }
-
     public char getCodSinalValLigacao() {
         return codSinalValLigacao;
     }
@@ -352,20 +330,12 @@ public class BilheteV2 implements Serializable {
         this.codSinalValLigacao = codSinalValLigacao;
     }
 
-    public BigDecimal getValAliquotaIcms() {
-        return valAliquotaIcms;
+    public BigDecimal getValLigacao() {
+        return valLigacao;
     }
 
-    public void setValAliquotaIcms(BigDecimal valAliquotaIcms) {
-        this.valAliquotaIcms = valAliquotaIcms;
-    }
-
-    public BigDecimal getValLigacaoComImposto() {
-        return valLigacaoComImposto;
-    }
-
-    public void setValLigacaoComImposto(BigDecimal valLigacaoComImposto) {
-        this.valLigacaoComImposto = valLigacaoComImposto;
+    public void setValLigacao(BigDecimal valLigacao) {
+        this.valLigacao = valLigacao;
     }
 
     public Integer getCodClasseServico() {
@@ -378,8 +348,8 @@ public class BilheteV2 implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.id);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -391,7 +361,7 @@ public class BilheteV2 implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BilheteV2 other = (BilheteV2) obj;
+        final ServicoV2 other = (ServicoV2) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -400,7 +370,7 @@ public class BilheteV2 implements Serializable {
 
     @Override
     public String toString() {
-        return "BilheteV2{" + "codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", dtaVencimento=" + dtaVencimento + ", dtaEmissao=" + dtaEmissao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codCnlRecursoRef=" + codCnlRecursoRef + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codDegrau=" + codDegrau + ", dtaLigacao=" + dtaLigacao + ", codCnlDestino=" + codCnlDestino + ", nomLocalidadeDestino=" + nomLocalidadeDestino + ", codUfDestino=" + codUfDestino + ", codInternacionalNacional=" + codInternacionalNacional + ", codOperadora=" + codOperadora + ", descOperadora=" + descOperadora + ", codPaisDestino=" + codPaisDestino + ", codAreaDdd=" + codAreaDdd + ", codTelefoneDestino=" + codTelefoneDestino + ", codConjugadoNumOrigem=" + codConjugadoNumOrigem + ", numDuracaoLigacao=" + numDuracaoLigacao + ", nomCategoria=" + nomCategoria + ", descCategoria=" + descCategoria + ", horLigacao=" + horLigacao + ", codTipoChamada=" + codTipoChamada + ", codGrupoHorarioTarifario=" + codGrupoHorarioTarifario + ", descGrupoHorarioTarifario=" + descGrupoHorarioTarifario + ", codDegrauLigacao=" + codDegrauLigacao + ", codSinalValLigacao=" + codSinalValLigacao + ", valAliquotaIcms=" + valAliquotaIcms + ", valLigacaoComImposto=" + valLigacaoComImposto + ", codClasseServico=" + codClasseServico + '}';
+        return "ServicoV2{" + "codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", dtaVencimento=" + dtaVencimento + ", dtaEmissao=" + dtaEmissao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codCnlRecursoRef=" + codCnlRecursoRef + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codDegrau=" + codDegrau + ", dtaServico=" + dtaServico + ", codCnlDestino=" + codCnlDestino + ", nomLocalidadeDestino=" + nomLocalidadeDestino + ", codUfDestino=" + codUfDestino + ", codInternacionalNacional=" + codInternacionalNacional + ", codOperadora=" + codOperadora + ", descOperadora=" + descOperadora + ", codPaisDestino=" + codPaisDestino + ", codAreaDdd=" + codAreaDdd + ", codTelefoneDestino=" + codTelefoneDestino + ", codConjugadoNumOrigem=" + codConjugadoNumOrigem + ", numDuracaoLigacao=" + numDuracaoLigacao + ", horLigacao=" + horLigacao + ", nomGrupoCategoria=" + nomGrupoCategoria + ", descGrupoCategoria=" + descGrupoCategoria + ", nomCategoria=" + nomCategoria + ", descCategoria=" + descCategoria + ", codSinalValLigacao=" + codSinalValLigacao + ", valLigacao=" + valLigacao + ", codClasseServico=" + codClasseServico + '}';
     }
 
 }

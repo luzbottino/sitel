@@ -42,6 +42,8 @@ public class EnderecoV2 implements Serializable{
     private String codCnlEnderecoA;
     @Column(name = "NOM_LOCALIDADE_A", length = 20)
     private String nomLocalidadeA;
+    @Column(name = "COD_UF_LOCALIDADE_A", length = 2)
+    private String codUfLocalidadeA;
     @Column(name = "DES_ENDERECO_A", length = 30)
     private String descEnderecoA;
     @Column(name = "NUM_ENDERECO_A", length = 5)
@@ -54,6 +56,8 @@ public class EnderecoV2 implements Serializable{
     private String codCnlEnderecoB;
     @Column(name = "NOM_LOCALIDADE_B", length = 20)
     private String nomLocalidadeB;
+    @Column(name = "COD_UF_LOCALIDADE_B", length = 2)
+    private String codUfLocalidadeB;
     @Column(name = "DES_ENDERECO_B", length = 30)
     private String descEnderecoB;
     @Column(name = "NUM_ENDERECO_B", length = 5)
@@ -218,6 +222,23 @@ public class EnderecoV2 implements Serializable{
         this.descBairroB = descBairroB;
     }
 
+    public String getCodUfLocalidadeA() {
+        return codUfLocalidadeA;
+    }
+
+    public void setCodUfLocalidadeA(String codUfLocalidadeA) {
+        this.codUfLocalidadeA = codUfLocalidadeA;
+    }
+
+    public String getCodUfLocalidadeB() {
+        return codUfLocalidadeB;
+    }
+
+    public void setCodUfLocalidadeB(String codUfLocalidadeB) {
+        this.codUfLocalidadeB = codUfLocalidadeB;
+    }
+    
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -242,7 +263,9 @@ public class EnderecoV2 implements Serializable{
 
     @Override
     public String toString() {
-        return "EnderecoV2{" + "id=" + id + ", codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codCnlEnderecoA=" + codCnlEnderecoA + ", nomLocalidadeA=" + nomLocalidadeA + ", descEnderecoA=" + descEnderecoA + ", numEnderecoA=" + numEnderecoA + ", descComplementoA=" + descComplementoA + ", descBairroA=" + descBairroA + ", codCnlEnderecoB=" + codCnlEnderecoB + ", nomLocalidadeB=" + nomLocalidadeB + ", descEnderecoB=" + descEnderecoB + ", numEnderecoB=" + numEnderecoB + ", descComplementoB=" + descComplementoB + ", descBairroB=" + descBairroB + '}';
+        return "EnderecoV2{" + "codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codCnlEnderecoA=" + codCnlEnderecoA + ", nomLocalidadeA=" + nomLocalidadeA + ", codUfLocalidadeA=" + codUfLocalidadeA + ", descEnderecoA=" + descEnderecoA + ", numEnderecoA=" + numEnderecoA + ", descComplementoA=" + descComplementoA + ", descBairroA=" + descBairroA + ", codCnlEnderecoB=" + codCnlEnderecoB + ", nomLocalidadeB=" + nomLocalidadeB + ", codUfLocalidadeB=" + codUfLocalidadeB + ", descEnderecoB=" + descEnderecoB + ", numEnderecoB=" + numEnderecoB + ", descComplementoB=" + descComplementoB + ", descBairroB=" + descBairroB + '}';
     }
+
+    
 
 }
