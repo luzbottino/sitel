@@ -3,59 +3,66 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.lbottino.sitel.view;
+package br.com.lbottino.sitel.service;
 
-import br.com.lbottino.sitel.dao.BilheteV2DAO;
 import br.com.lbottino.sitel.model.BilheteV2;
 import br.com.lbottino.sitel.model.EnderecoV2;
 import br.com.lbottino.sitel.model.HeaderV2;
 import br.com.lbottino.sitel.model.ResumoV2;
-import br.com.lbottino.sitel.util.Task;
+import br.com.lbottino.sitel.view.FRMPrincipal;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JProgressBar;
+import javax.swing.JFrame;
+import javax.swing.ProgressMonitorInputStream;
 
 /**
  *
  * @author luis
  */
-public class threadUpload implements Runnable {
+public class ThreadUpload implements Runnable {
+
     private static String path;
-    static JProgressBar pbUpload;
-    
-    public threadUpload(String path, JProgressBar pbUpload) {
+
+    public ThreadUpload(String path) {
         this.path = path;
-        this.pbUpload = pbUpload;
     }
 
     @Override
     public void run() {
         try {
             processaFatura();
-            pbUpload = new JProgressBar();            
-            
+
         } catch (ParseException ex) {
-            Logger.getLogger(threadUpload.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ThreadUpload.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(threadUpload.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ThreadUpload.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ThreadUpload.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void processaFatura() throws ParseException, FileNotFoundException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-        
+    private void processaFatura() throws ParseException, FileNotFoundException, IOException {
+
+        InputStream inputStream = new BufferedInputStream(new ProgressMonitorInputStream(new JFrame(), "Lendo " + path, new FileInputStream(path)));
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
         String line;
-        int i = 0;
+
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
         try {
             line = bufferedReader.readLine();
+
             System.out.println(line.substring(164, 168));
             if (line.substring(164, 168).equals("V3R0")) {
 
@@ -71,19 +78,18 @@ public class threadUpload implements Runnable {
                     } else if (line.substring(0, 1).equals("3")) {
                         buildBilhete(line);
                     }
-                    
+
                     line = bufferedReader.readLine();
-                    pbUpload.setValue(i);
-                    pbUpload.repaint();
-                    i++;
                 }
+                bufferedReader.close();
+                inputStream.close();
             }
 
         } catch (IOException ex) {
             Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void buildHeaderV2(String header) throws ParseException {
         HeaderV2 headerV2 = new HeaderV2();
         headerV2.setCodTipoRegistro(header.substring(0, 1));
@@ -99,7 +105,7 @@ public class threadUpload implements Runnable {
         headerV2.setDtaVencimento(parseToDate(header.substring(133, 141)));
         headerV2.setDtaEmissao(parseToDate(header.substring(141, 149)));
 
-//        System.out.println(headerV2.toString());
+        System.out.println(headerV2.toString());
     }
 
     private void buildResumo(String resumo) throws ParseException {
@@ -141,7 +147,7 @@ public class threadUpload implements Runnable {
         resumoV2.setCodSinalValConta(resumo.charAt(300));
         resumoV2.setValConta(parseToBigDecimalVal(resumo.substring(301, 314)));
 
-//        new ResumoV2DAO().save(resumoV2);
+        System.out.println(resumoV2.toString());
     }
 
     private void buildEndereco(String endereco) {
@@ -168,13 +174,12 @@ public class threadUpload implements Runnable {
         enderecoV2.setDescComplementoB(endereco.substring(219, 229));
         enderecoV2.setDescBairroB(endereco.substring(229, 249));
 
-//        System.out.println(enderecoV2.toString());
+        System.out.println(enderecoV2.toString());
     }
 
     private void buildBilhete(String bilhete) throws ParseException {
         BilheteV2 bilheteV2 = new BilheteV2();
 
-        //bilheteV2.set(bilhete.substring(0, 1));
         bilheteV2.setCodTipoRegistro(bilhete.substring(0, 1));
         bilheteV2.setCodControleGravacao(bilhete.substring(1, 13));
         bilheteV2.setDtaVencimento(parseToDate(bilhete.substring(13, 21)));
@@ -209,7 +214,7 @@ public class threadUpload implements Runnable {
         bilheteV2.setValLigacaoComImposto(parseToBigDecimalVal(bilhete.substring(271, 284)));
         bilheteV2.setCodClasseServico(Integer.parseInt(bilhete.substring(284, 289)));
 
-        new BilheteV2DAO().save(bilheteV2);
+        System.out.println(bilheteV2.toString());
     }
 
     private Date parseToDate(String dateFormat) throws ParseException {
@@ -264,5 +269,5 @@ public class threadUpload implements Runnable {
 
         return bigDecimal;
     }
-    
+
 }

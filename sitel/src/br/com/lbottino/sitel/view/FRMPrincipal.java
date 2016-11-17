@@ -6,35 +6,19 @@
  */
 package br.com.lbottino.sitel.view;
 
-import br.com.lbottino.sitel.dao.BilheteV2DAO;
-import br.com.lbottino.sitel.dao.ResumoV2DAO;
-import br.com.lbottino.sitel.model.BilheteV2;
-import br.com.lbottino.sitel.model.EnderecoV2;
-import br.com.lbottino.sitel.model.HeaderV2;
-import br.com.lbottino.sitel.model.ResumoV2;
-import br.com.lbottino.sitel.util.Task;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import br.com.lbottino.sitel.service.ThreadUpload;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.SwingWorker;
 
 /**
  *
  * @author pig
  */
 public class FRMPrincipal extends javax.swing.JFrame {
-
-    
 
     /**
      * Creates new form FRMPrincipal
@@ -54,18 +38,17 @@ public class FRMPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         btnGroupFebrabam = new javax.swing.ButtonGroup();
+        pnlPrincipal = new javax.swing.JPanel();
         pnlUploadFatura = new javax.swing.JPanel();
         tfFilePath = new javax.swing.JTextField();
-        rdbFebrabamV2 = new javax.swing.JRadioButton();
-        rdbFebrabamV3 = new javax.swing.JRadioButton();
-        jLabel2 = new javax.swing.JLabel();
         lblFilePath = new javax.swing.JLabel();
         btnOpenFile = new javax.swing.JButton();
         lblContrato = new javax.swing.JLabel();
         cbContrato = new javax.swing.JComboBox();
         lblTitle = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        pbUpload = new javax.swing.JProgressBar();
+        btnSubmit = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
         mbPrincipal = new javax.swing.JMenuBar();
         mFinanceiro = new javax.swing.JMenu();
         mFatura = new javax.swing.JMenu();
@@ -75,27 +58,22 @@ public class FRMPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(900, 800));
 
-        pnlUploadFatura.setBackground(new java.awt.Color(234, 234, 234));
-        pnlUploadFatura.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(191, 191, 191), 2));
+        pnlPrincipal.setBackground(new java.awt.Color(20, 67, 122));
+        pnlPrincipal.setPreferredSize(new java.awt.Dimension(800, 654));
+
+        pnlUploadFatura.setBackground(new java.awt.Color(254, 254, 254));
+        pnlUploadFatura.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(254, 254, 254), 2));
+        pnlUploadFatura.setForeground(new java.awt.Color(128, 134, 226));
 
         tfFilePath.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
 
-        btnGroupFebrabam.add(rdbFebrabamV2);
-        rdbFebrabamV2.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        rdbFebrabamV2.setText("Febrabam V2");
-
-        btnGroupFebrabam.add(rdbFebrabamV3);
-        rdbFebrabamV3.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        rdbFebrabamV3.setText("Febrabam V3");
-
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jLabel2.setText("Selecione a versão do layout  Febrabam");
-
         lblFilePath.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFilePath.setForeground(new java.awt.Color(118, 118, 118));
         lblFilePath.setText("Arquivo");
 
-        btnOpenFile.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        btnOpenFile.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         btnOpenFile.setText("Abrir Arquivo");
+        btnOpenFile.setPreferredSize(new java.awt.Dimension(120, 30));
         btnOpenFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOpenFileActionPerformed(evt);
@@ -103,80 +81,108 @@ public class FRMPrincipal extends javax.swing.JFrame {
         });
 
         lblContrato.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblContrato.setForeground(new java.awt.Color(118, 118, 118));
         lblContrato.setText("Selecione o contrato da fatura");
 
         cbContrato.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         cbContrato.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         lblTitle.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(148, 146, 154));
         lblTitle.setText("Upload de Fatura");
+
+        jSeparator1.setForeground(new java.awt.Color(186, 185, 188));
+
+        btnSubmit.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnSubmit.setText("Gravar");
+        btnSubmit.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setForeground(new java.awt.Color(186, 185, 188));
 
         javax.swing.GroupLayout pnlUploadFaturaLayout = new javax.swing.GroupLayout(pnlUploadFatura);
         pnlUploadFatura.setLayout(pnlUploadFaturaLayout);
         pnlUploadFaturaLayout.setHorizontalGroup(
             pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator2)
             .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
                         .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUploadFaturaLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(lblTitle))
                             .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
-                                .addComponent(tfFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnOpenFile))
-                            .addComponent(rdbFebrabamV2)
-                            .addComponent(rdbFebrabamV3)
-                            .addComponent(jLabel2)
-                            .addComponent(lblContrato)
-                            .addComponent(cbContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblFilePath))
-                        .addGap(0, 162, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUploadFaturaLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblTitle))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblContrato)
+                                    .addComponent(lblFilePath)
+                                    .addComponent(cbContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 183, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
+                        .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnOpenFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlUploadFaturaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
-                .addGap(194, 194, 194)
-                .addComponent(pbUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlUploadFaturaLayout.setVerticalGroup(
             pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
-                .addGap(174, 174, 174)
+                .addGap(164, 164, 164)
                 .addComponent(lblTitle)
                 .addGap(10, 10, 10)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rdbFebrabamV2)
-                .addGap(18, 18, 18)
-                .addComponent(rdbFebrabamV3)
-                .addGap(18, 18, 18)
+                .addGap(43, 43, 43)
                 .addComponent(lblContrato)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cbContrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addComponent(lblFilePath)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOpenFile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                .addComponent(pbUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
+                .addComponent(tfFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnOpenFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
-        mbPrincipal.setBackground(new java.awt.Color(234, 234, 234));
+        javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
+        pnlPrincipal.setLayout(pnlPrincipalLayout);
+        pnlPrincipalLayout.setHorizontalGroup(
+            pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                .addGap(138, 138, 138)
+                .addComponent(pnlUploadFatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        pnlPrincipalLayout.setVerticalGroup(
+            pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlUploadFatura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
-        mFinanceiro.setForeground(new java.awt.Color(1, 1, 1));
+        mbPrincipal.setBackground(new java.awt.Color(254, 254, 254));
+
+        mFinanceiro.setBackground(new java.awt.Color(205, 205, 205));
+        mFinanceiro.setForeground(new java.awt.Color(82, 88, 92));
         mFinanceiro.setText("Financeiro");
         mFinanceiro.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         mbPrincipal.add(mFinanceiro);
 
-        mFatura.setForeground(new java.awt.Color(1, 1, 1));
+        mFatura.setBackground(new java.awt.Color(205, 205, 205));
+        mFatura.setForeground(new java.awt.Color(82, 88, 92));
         mFatura.setText("Fatura");
         mFatura.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
 
@@ -190,7 +196,8 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
         mbPrincipal.add(mFatura);
 
-        mConfiguracao.setForeground(new java.awt.Color(1, 1, 1));
+        mConfiguracao.setBackground(new java.awt.Color(205, 205, 205));
+        mConfiguracao.setForeground(new java.awt.Color(82, 88, 92));
         mConfiguracao.setText("Configuração");
         mConfiguracao.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         mbPrincipal.add(mConfiguracao);
@@ -201,49 +208,56 @@ public class FRMPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(220, Short.MAX_VALUE)
-                .addComponent(pnlUploadFatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(220, 220, 220))
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlUploadFatura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void miUploadFaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miUploadFaturaActionPerformed
+
         pnlUploadFatura.setVisible(true);
     }//GEN-LAST:event_miUploadFaturaActionPerformed
 
     private void btnOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenFileActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
-
+        fileChooser = new JFileChooser();
         int returnVal = fileChooser.showOpenDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            try {
-                readFatura(fileChooser);
-            } catch (IOException ex) {
-                Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-
+            tfFilePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+        }else{
+            fileChooser = null;
         }
 
     }//GEN-LAST:event_btnOpenFileActionPerformed
 
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        try {
+            if (fileChooser != null) {
+                readFatura(fileChooser);
+            }else{
+                JOptionPane.showMessageDialog(this, "Abra o arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
+    private JFileChooser fileChooser;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGroupFebrabam;
     private javax.swing.JButton btnOpenFile;
+    private javax.swing.JButton btnSubmit;
     private javax.swing.JComboBox cbContrato;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblContrato;
     private javax.swing.JLabel lblFilePath;
     private javax.swing.JLabel lblTitle;
@@ -252,10 +266,8 @@ public class FRMPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu mFinanceiro;
     private javax.swing.JMenuBar mbPrincipal;
     private javax.swing.JMenuItem miUploadFatura;
-    private javax.swing.JProgressBar pbUpload;
+    private javax.swing.JPanel pnlPrincipal;
     private javax.swing.JPanel pnlUploadFatura;
-    private javax.swing.JRadioButton rdbFebrabamV2;
-    private javax.swing.JRadioButton rdbFebrabamV3;
     private javax.swing.JTextField tfFilePath;
     // End of variables declaration//GEN-END:variables
 
@@ -264,229 +276,10 @@ public class FRMPrincipal extends javax.swing.JFrame {
     }
 
     private void readFatura(JFileChooser fileChooser) throws IOException, ParseException {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
-            tfFilePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
-            String path = fileChooser.getSelectedFile().getAbsolutePath();
 
-            new Thread(new threadUpload(path, pbUpload)).start();
-            //processFatura(bufferedReader);
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
 
-            bufferedReader.close();
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Não foi possível abrir o arquivo!", "Erro", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, e.getMessage(), e);
-        }
+        new Thread(new ThreadUpload(path)).start();
 
     }
-
-    private void processFatura(BufferedReader bufferedReader) throws ParseException {
-        String line;
-        try {
-            line = bufferedReader.readLine();
-            System.out.println(line.substring(164, 168));
-            if (line.substring(164, 168).equals("V3R0")) {
-
-            } else {
-
-                while (line != null) {
-                    if (line.substring(0, 1).equals("0")) {
-                        buildHeaderV2(line);
-                    } else if (line.substring(0, 1).equals("1")) {
-                        buildResumo(line);
-                    } else if (line.substring(0, 1).equals("2")) {
-                        buildEndereco(line);
-                    } else if (line.substring(0, 1).equals("3")) {
-                        buildBilhete(line);
-                    }
-                    line = bufferedReader.readLine();
-                }
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(FRMPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void buildHeaderV2(String header) throws ParseException {
-        HeaderV2 headerV2 = new HeaderV2();
-        headerV2.setCodTipoRegistro(header.substring(0, 1));
-        headerV2.setCodControleGravacao(header.substring(1, 13));
-        headerV2.setDtaGeracaoArq(parseToDate(header.substring(13, 21)));
-        headerV2.setNomOperadora(header.substring(21, 36));
-        headerV2.setNomUf(header.substring(36, 38));
-        headerV2.setCodCliente(header.substring(38, 52));
-        headerV2.setNomCliente(header.substring(52, 93));
-        headerV2.setCodCgcCliente(header.substring(93, 108));
-        headerV2.setCodIdentContaUnica(header.substring(108, 123));
-        headerV2.setMesAnoRef(header.substring(123, 129));
-        headerV2.setDtaVencimento(parseToDate(header.substring(133, 141)));
-        headerV2.setDtaEmissao(parseToDate(header.substring(141, 149)));
-
-//        System.out.println(headerV2.toString());
-    }
-
-    private void buildResumo(String resumo) throws ParseException {
-        ResumoV2 resumoV2 = new ResumoV2();
-
-        resumoV2.setCodTipoRegistro(resumo.substring(0, 1));
-        resumoV2.setCodControleGravacao(resumo.substring(1, 13));
-        resumoV2.setCodIdentContaUnica(resumo.substring(13, 28));
-        resumoV2.setMesAnoRef(resumo.substring(28, 38));
-        resumoV2.setDtaVencimento(parseToDate(resumo.substring(38, 46)));
-        resumoV2.setDtaEmissao(parseToDate(resumo.substring(46, 54)));
-        resumoV2.setCodIdentUnicoRecurso(resumo.substring(54, 79));
-        resumoV2.setCodCnlRecursoRef(Integer.parseInt(resumo.substring(79, 84)));
-        resumoV2.setNomLocalidade(resumo.substring(84, 109));
-        resumoV2.setCodDdd(resumo.substring(109, 111));
-        resumoV2.setCodTelefone(resumo.substring(111, 121));
-        resumoV2.setCodTipoServico(resumo.substring(121, 125));
-        resumoV2.setDesTipoServico(resumo.substring(125, 160));
-        resumoV2.setNomRecurso(resumo.substring(160, 175));
-        resumoV2.setCodDegrau(resumo.substring(175, 177));
-        resumoV2.setQtdVelocidade(resumo.substring(177, 182));
-        resumoV2.setCodUnVelocidadeRecurso(resumo.substring(182, 186));
-        resumoV2.setDtaInicioAss(parseToDate(resumo.substring(186, 194)));
-        resumoV2.setDtaFimAss(parseToDate(resumo.substring(194, 202)));
-        resumoV2.setDtaInicioServico(parseToDate(resumo.substring(202, 210)));
-        resumoV2.setDtaFimServico(parseToDate(resumo.substring(210, 218)));
-        resumoV2.setCodUnConsumo(resumo.substring(218, 223));
-        resumoV2.setQtdConsumo(Integer.parseInt(resumo.substring(223, 230)));
-        resumoV2.setCodSinalValConsumo(resumo.charAt(230));
-        resumoV2.setValConsumo(parseToBigDecimalVal(resumo.substring(231, 244)));
-        resumoV2.setCodSinalAss(resumo.charAt(244));
-        resumoV2.setValAssinatura(parseToBigDecimalVal(resumo.substring(245, 258)));
-        resumoV2.setPctAliquota(resumo.substring(258, 260));
-        resumoV2.setCodSinalIcms(resumo.charAt(260));
-        resumoV2.setValIcms(parseToBigDecimalVal(resumo.substring(261, 274)));
-        resumoV2.setCodSinalValTotalOutrosImpostos(resumo.charAt(274));
-        resumoV2.setValTotalImpostos(parseToBigDecimalVal(resumo.substring(275, 288)));
-        resumoV2.setCodNotaFiscal(resumo.substring(288, 300));
-        resumoV2.setCodSinalValConta(resumo.charAt(300));
-        resumoV2.setValConta(parseToBigDecimalVal(resumo.substring(301, 314)));
-
-//        new ResumoV2DAO().save(resumoV2);
-    }
-
-    private void buildEndereco(String endereco) {
-        EnderecoV2 enderecoV2 = new EnderecoV2();
-
-        enderecoV2.setCodTipoRegistro(endereco.substring(0, 1));
-        enderecoV2.setCodControleGravacao(endereco.substring(1, 13));
-        enderecoV2.setCodIdentUnicoRecurso(endereco.substring(13, 38));
-        enderecoV2.setCodDdd(endereco.substring(38, 40));
-        enderecoV2.setCodTelefone(endereco.substring(40, 50));
-        enderecoV2.setNomRecurso(endereco.substring(50, 65));
-        enderecoV2.setCodCnlEnderecoA(endereco.substring(65, 70));
-        enderecoV2.setNomLocalidadeA(endereco.substring(70, 90));
-        enderecoV2.setCodUfLocalidadeA(endereco.substring(90, 92));
-        enderecoV2.setDescEnderecoA(endereco.substring(92, 122));
-        enderecoV2.setNumEnderecoA(endereco.substring(122, 127));
-        enderecoV2.setDescComplementoA(endereco.substring(127, 137));
-        enderecoV2.setDescBairroA(endereco.substring(137, 157));
-        enderecoV2.setCodCnlEnderecoB(endereco.substring(157, 162));
-        enderecoV2.setNomLocalidadeB(endereco.substring(162, 182));
-        enderecoV2.setCodUfLocalidadeB(endereco.substring(182, 184));
-        enderecoV2.setDescEnderecoB(endereco.substring(184, 214));
-        enderecoV2.setNumEnderecoB(endereco.substring(214, 219));
-        enderecoV2.setDescComplementoB(endereco.substring(219, 229));
-        enderecoV2.setDescBairroB(endereco.substring(229, 249));
-
-//        System.out.println(enderecoV2.toString());
-    }
-
-    private void buildBilhete(String bilhete) throws ParseException {
-        BilheteV2 bilheteV2 = new BilheteV2();
-
-        //bilheteV2.set(bilhete.substring(0, 1));
-        bilheteV2.setCodTipoRegistro(bilhete.substring(0, 1));
-        bilheteV2.setCodControleGravacao(bilhete.substring(1, 13));
-        bilheteV2.setDtaVencimento(parseToDate(bilhete.substring(13, 21)));
-        bilheteV2.setDtaEmissao(parseToDate(bilhete.substring(21, 29)));
-        bilheteV2.setCodIdentUnicoRecurso(bilhete.substring(29, 54));
-        bilheteV2.setCodCnlRecursoRef(Integer.parseInt(bilhete.substring(54, 59)));
-        bilheteV2.setCodDdd(bilhete.substring(59, 61));
-        bilheteV2.setCodTelefone(bilhete.substring(61, 71));
-        bilheteV2.setNomRecurso(bilhete.substring(71, 86));
-        bilheteV2.setCodDegrau(bilhete.substring(86, 88));
-        bilheteV2.setDtaLigacao(parseToDate(bilhete.substring(88, 96)));
-        bilheteV2.setCodCnlDestino(Integer.parseInt(bilhete.substring(96, 98)));
-        bilheteV2.setNomLocalidadeDestino(bilhete.substring(101, 126));
-        bilheteV2.setCodUfDestino(bilhete.substring(126, 128));
-        bilheteV2.setCodInternacionalNacional(bilhete.substring(128, 130));
-        bilheteV2.setCodOperadora(bilhete.substring(130, 132));
-        bilheteV2.setDescOperadora(bilhete.substring(132, 152));
-        bilheteV2.setCodPaisDestino(bilhete.substring(152, 155));
-        bilheteV2.setCodAreaDdd(bilhete.substring(155, 159));
-        bilheteV2.setCodTelefoneDestino(bilhete.substring(159, 169));
-        bilheteV2.setCodConjugadoNumOrigem(bilhete.substring(169, 171));
-        bilheteV2.setNumDuracaoLigacao(parseToBigDecimalDuration(bilhete.substring(171, 177)));
-        bilheteV2.setNomCategoria(bilhete.substring(177, 180));
-        bilheteV2.setDescCategoria(bilhete.substring(180, 230));
-        bilheteV2.setHorLigacao(parseToHour(bilhete.substring(230, 236)));
-        bilheteV2.setCodTipoChamada(bilhete.substring(236, 237));
-        bilheteV2.setCodGrupoHorarioTarifario(bilhete.substring(237, 238));
-        bilheteV2.setDescGrupoHorarioTarifario(bilhete.substring(238, 263));
-        bilheteV2.setCodDegrauLigacao(Integer.parseInt(bilhete.substring(263, 265)));
-        bilheteV2.setCodSinalValLigacao(bilhete.charAt(265));
-        bilheteV2.setValAliquotaIcms(parseToBigDecimalPercent(bilhete.substring(266, 271)));
-        bilheteV2.setValLigacaoComImposto(parseToBigDecimalVal(bilhete.substring(271, 284)));
-        bilheteV2.setCodClasseServico(Integer.parseInt(bilhete.substring(284, 289)));
-
-        new BilheteV2DAO().save(bilheteV2);
-    }
-
-    private Date parseToDate(String dateFormat) throws ParseException {
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
-        if (!dateFormat.equals("00000000")) {
-            String year = dateFormat.substring(0, 4);
-            String month = dateFormat.substring(4, 6);
-            String day = dateFormat.substring(6, 8);
-            Date date = format.parse(year + "-" + month + "-" + day);
-            return date;
-        }
-        return null;
-
-    }
-
-    private Date parseToHour(String hourFormat) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("HH" + ":" + "mm" + ":" + "ss");
-        if (!hourFormat.equals("000000")) {
-            String hour = hourFormat.substring(0, 2);
-            String minute = hourFormat.substring(2, 4);
-            String seconds = hourFormat.substring(4, 6);
-            Date date = format.parse(hour + ":" + minute + ":" + seconds);
-            return date;
-        }
-        return null;
-    }
-
-    private BigDecimal parseToBigDecimalVal(String bigDecimalFormat) {
-        String beforeComma = bigDecimalFormat.substring(0, 11);
-        String afterComma = bigDecimalFormat.substring(11, 13);
-
-        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
-
-        return bigDecimal;
-    }
-
-    private BigDecimal parseToBigDecimalDuration(String bigDecimalFormat) {
-        String beforeComma = bigDecimalFormat.substring(0, 5);
-        String afterComma = bigDecimalFormat.substring(5, 6);
-
-        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
-
-        return bigDecimal;
-    }
-
-    private BigDecimal parseToBigDecimalPercent(String bigDecimalFormat) {
-        String beforeComma = bigDecimalFormat.substring(0, 3);
-        String afterComma = bigDecimalFormat.substring(3, 5);
-
-        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
-
-        return bigDecimal;
-    }
-
 }
