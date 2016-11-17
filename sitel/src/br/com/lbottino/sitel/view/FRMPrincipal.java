@@ -6,9 +6,13 @@
  */
 package br.com.lbottino.sitel.view;
 
+import br.com.lbottino.sitel.dao.BilheteV2DAO;
+import br.com.lbottino.sitel.dao.ResumoV2DAO;
+import br.com.lbottino.sitel.model.BilheteV2;
 import br.com.lbottino.sitel.model.EnderecoV2;
 import br.com.lbottino.sitel.model.HeaderV2;
 import br.com.lbottino.sitel.model.ResumoV2;
+import br.com.lbottino.sitel.util.Task;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,12 +25,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @author pig
  */
 public class FRMPrincipal extends javax.swing.JFrame {
+
+    
 
     /**
      * Creates new form FRMPrincipal
@@ -57,6 +65,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
         cbContrato = new javax.swing.JComboBox();
         lblTitle = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        pbUpload = new javax.swing.JProgressBar();
         mbPrincipal = new javax.swing.JMenuBar();
         mFinanceiro = new javax.swing.JMenu();
         mFatura = new javax.swing.JMenu();
@@ -127,6 +136,10 @@ public class FRMPrincipal extends javax.swing.JFrame {
                         .addComponent(lblTitle))
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addGroup(pnlUploadFaturaLayout.createSequentialGroup()
+                .addGap(194, 194, 194)
+                .addComponent(pbUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlUploadFaturaLayout.setVerticalGroup(
             pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +164,9 @@ public class FRMPrincipal extends javax.swing.JFrame {
                 .addGroup(pnlUploadFaturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOpenFile))
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addComponent(pbUpload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
 
         mbPrincipal.setBackground(new java.awt.Color(234, 234, 234));
@@ -237,6 +252,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu mFinanceiro;
     private javax.swing.JMenuBar mbPrincipal;
     private javax.swing.JMenuItem miUploadFatura;
+    private javax.swing.JProgressBar pbUpload;
     private javax.swing.JPanel pnlUploadFatura;
     private javax.swing.JRadioButton rdbFebrabamV2;
     private javax.swing.JRadioButton rdbFebrabamV3;
@@ -251,8 +267,10 @@ public class FRMPrincipal extends javax.swing.JFrame {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileChooser.getSelectedFile().getAbsolutePath()));
             tfFilePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            String path = fileChooser.getSelectedFile().getAbsolutePath();
 
-            processFatura(bufferedReader);
+            new Thread(new threadUpload(path, pbUpload)).start();
+            //processFatura(bufferedReader);
 
             bufferedReader.close();
         } catch (FileNotFoundException e) {
@@ -270,13 +288,16 @@ public class FRMPrincipal extends javax.swing.JFrame {
             if (line.substring(164, 168).equals("V3R0")) {
 
             } else {
+
                 while (line != null) {
                     if (line.substring(0, 1).equals("0")) {
                         buildHeaderV2(line);
                     } else if (line.substring(0, 1).equals("1")) {
                         buildResumo(line);
-                    }else if (line.substring(0, 1).equals("2")){
+                    } else if (line.substring(0, 1).equals("2")) {
                         buildEndereco(line);
+                    } else if (line.substring(0, 1).equals("3")) {
+                        buildBilhete(line);
                     }
                     line = bufferedReader.readLine();
                 }
@@ -302,8 +323,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
         headerV2.setDtaVencimento(parseToDate(header.substring(133, 141)));
         headerV2.setDtaEmissao(parseToDate(header.substring(141, 149)));
 
-        System.out.println(headerV2.toString());
-
+//        System.out.println(headerV2.toString());
     }
 
     private void buildResumo(String resumo) throws ParseException {
@@ -333,26 +353,24 @@ public class FRMPrincipal extends javax.swing.JFrame {
         resumoV2.setCodUnConsumo(resumo.substring(218, 223));
         resumoV2.setQtdConsumo(Integer.parseInt(resumo.substring(223, 230)));
         resumoV2.setCodSinalValConsumo(resumo.charAt(230));
-        resumoV2.setValConsumo(parseToBigDecimal(resumo.substring(231, 244)));
+        resumoV2.setValConsumo(parseToBigDecimalVal(resumo.substring(231, 244)));
         resumoV2.setCodSinalAss(resumo.charAt(244));
-        resumoV2.setValAssinatura(parseToBigDecimal(resumo.substring(245, 258)));
+        resumoV2.setValAssinatura(parseToBigDecimalVal(resumo.substring(245, 258)));
         resumoV2.setPctAliquota(resumo.substring(258, 260));
         resumoV2.setCodSinalIcms(resumo.charAt(260));
-        resumoV2.setValIcms(parseToBigDecimal(resumo.substring(261, 274)));
+        resumoV2.setValIcms(parseToBigDecimalVal(resumo.substring(261, 274)));
         resumoV2.setCodSinalValTotalOutrosImpostos(resumo.charAt(274));
-        resumoV2.setValTotalImpostos(parseToBigDecimal(resumo.substring(275, 288)));
+        resumoV2.setValTotalImpostos(parseToBigDecimalVal(resumo.substring(275, 288)));
         resumoV2.setCodNotaFiscal(resumo.substring(288, 300));
         resumoV2.setCodSinalValConta(resumo.charAt(300));
-        resumoV2.setValConta(parseToBigDecimal(resumo.substring(301, 314)));
+        resumoV2.setValConta(parseToBigDecimalVal(resumo.substring(301, 314)));
 
-        System.out.println(resumoV2.toString());
-
+//        new ResumoV2DAO().save(resumoV2);
     }
 
-    private void buildEndereco(String endereco) {        
+    private void buildEndereco(String endereco) {
         EnderecoV2 enderecoV2 = new EnderecoV2();
-        
-        //enderecoV2.set(endereco.substring(WIDTH, WIDTH));
+
         enderecoV2.setCodTipoRegistro(endereco.substring(0, 1));
         enderecoV2.setCodControleGravacao(endereco.substring(1, 13));
         enderecoV2.setCodIdentUnicoRecurso(endereco.substring(13, 38));
@@ -365,11 +383,59 @@ public class FRMPrincipal extends javax.swing.JFrame {
         enderecoV2.setDescEnderecoA(endereco.substring(92, 122));
         enderecoV2.setNumEnderecoA(endereco.substring(122, 127));
         enderecoV2.setDescComplementoA(endereco.substring(127, 137));
-        
-        System.out.println(enderecoV2.toString());
-        
+        enderecoV2.setDescBairroA(endereco.substring(137, 157));
+        enderecoV2.setCodCnlEnderecoB(endereco.substring(157, 162));
+        enderecoV2.setNomLocalidadeB(endereco.substring(162, 182));
+        enderecoV2.setCodUfLocalidadeB(endereco.substring(182, 184));
+        enderecoV2.setDescEnderecoB(endereco.substring(184, 214));
+        enderecoV2.setNumEnderecoB(endereco.substring(214, 219));
+        enderecoV2.setDescComplementoB(endereco.substring(219, 229));
+        enderecoV2.setDescBairroB(endereco.substring(229, 249));
+
+//        System.out.println(enderecoV2.toString());
     }
-    
+
+    private void buildBilhete(String bilhete) throws ParseException {
+        BilheteV2 bilheteV2 = new BilheteV2();
+
+        //bilheteV2.set(bilhete.substring(0, 1));
+        bilheteV2.setCodTipoRegistro(bilhete.substring(0, 1));
+        bilheteV2.setCodControleGravacao(bilhete.substring(1, 13));
+        bilheteV2.setDtaVencimento(parseToDate(bilhete.substring(13, 21)));
+        bilheteV2.setDtaEmissao(parseToDate(bilhete.substring(21, 29)));
+        bilheteV2.setCodIdentUnicoRecurso(bilhete.substring(29, 54));
+        bilheteV2.setCodCnlRecursoRef(Integer.parseInt(bilhete.substring(54, 59)));
+        bilheteV2.setCodDdd(bilhete.substring(59, 61));
+        bilheteV2.setCodTelefone(bilhete.substring(61, 71));
+        bilheteV2.setNomRecurso(bilhete.substring(71, 86));
+        bilheteV2.setCodDegrau(bilhete.substring(86, 88));
+        bilheteV2.setDtaLigacao(parseToDate(bilhete.substring(88, 96)));
+        bilheteV2.setCodCnlDestino(Integer.parseInt(bilhete.substring(96, 98)));
+        bilheteV2.setNomLocalidadeDestino(bilhete.substring(101, 126));
+        bilheteV2.setCodUfDestino(bilhete.substring(126, 128));
+        bilheteV2.setCodInternacionalNacional(bilhete.substring(128, 130));
+        bilheteV2.setCodOperadora(bilhete.substring(130, 132));
+        bilheteV2.setDescOperadora(bilhete.substring(132, 152));
+        bilheteV2.setCodPaisDestino(bilhete.substring(152, 155));
+        bilheteV2.setCodAreaDdd(bilhete.substring(155, 159));
+        bilheteV2.setCodTelefoneDestino(bilhete.substring(159, 169));
+        bilheteV2.setCodConjugadoNumOrigem(bilhete.substring(169, 171));
+        bilheteV2.setNumDuracaoLigacao(parseToBigDecimalDuration(bilhete.substring(171, 177)));
+        bilheteV2.setNomCategoria(bilhete.substring(177, 180));
+        bilheteV2.setDescCategoria(bilhete.substring(180, 230));
+        bilheteV2.setHorLigacao(parseToHour(bilhete.substring(230, 236)));
+        bilheteV2.setCodTipoChamada(bilhete.substring(236, 237));
+        bilheteV2.setCodGrupoHorarioTarifario(bilhete.substring(237, 238));
+        bilheteV2.setDescGrupoHorarioTarifario(bilhete.substring(238, 263));
+        bilheteV2.setCodDegrauLigacao(Integer.parseInt(bilhete.substring(263, 265)));
+        bilheteV2.setCodSinalValLigacao(bilhete.charAt(265));
+        bilheteV2.setValAliquotaIcms(parseToBigDecimalPercent(bilhete.substring(266, 271)));
+        bilheteV2.setValLigacaoComImposto(parseToBigDecimalVal(bilhete.substring(271, 284)));
+        bilheteV2.setCodClasseServico(Integer.parseInt(bilhete.substring(284, 289)));
+
+        new BilheteV2DAO().save(bilheteV2);
+    }
+
     private Date parseToDate(String dateFormat) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
@@ -384,7 +450,19 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
     }
 
-    private BigDecimal parseToBigDecimal(String bigDecimalFormat) {
+    private Date parseToHour(String hourFormat) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("HH" + ":" + "mm" + ":" + "ss");
+        if (!hourFormat.equals("000000")) {
+            String hour = hourFormat.substring(0, 2);
+            String minute = hourFormat.substring(2, 4);
+            String seconds = hourFormat.substring(4, 6);
+            Date date = format.parse(hour + ":" + minute + ":" + seconds);
+            return date;
+        }
+        return null;
+    }
+
+    private BigDecimal parseToBigDecimalVal(String bigDecimalFormat) {
         String beforeComma = bigDecimalFormat.substring(0, 11);
         String afterComma = bigDecimalFormat.substring(11, 13);
 
@@ -393,5 +471,22 @@ public class FRMPrincipal extends javax.swing.JFrame {
         return bigDecimal;
     }
 
+    private BigDecimal parseToBigDecimalDuration(String bigDecimalFormat) {
+        String beforeComma = bigDecimalFormat.substring(0, 5);
+        String afterComma = bigDecimalFormat.substring(5, 6);
+
+        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
+
+        return bigDecimal;
+    }
+
+    private BigDecimal parseToBigDecimalPercent(String bigDecimalFormat) {
+        String beforeComma = bigDecimalFormat.substring(0, 3);
+        String afterComma = bigDecimalFormat.substring(3, 5);
+
+        BigDecimal bigDecimal = new BigDecimal(beforeComma + "." + afterComma);
+
+        return bigDecimal;
+    }
 
 }

@@ -94,7 +94,7 @@ public class BilheteV2 implements Serializable {
     private Integer codDegrauLigacao;
     @Column(name = "COD_SINAL_VAL_LIGACAO")
     private char codSinalValLigacao;
-    @Column(name = "VAL_ALIQUOTA_ICMS", precision = 3, scale = 2)
+    @Column(name = "VAL_ALIQUOTA_ICMS", precision = 5, scale = 2)
     private BigDecimal valAliquotaIcms;
     @Column(name = "VAL_LIGACAO_COM_IMPOSTO", precision = 11, scale = 2)
     private BigDecimal valLigacaoComImposto;
