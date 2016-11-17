@@ -44,11 +44,11 @@ public class FRMLogin extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(390, 480));
+        setPreferredSize(new java.awt.Dimension(500, 480));
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(254, 254, 254));
-        jPanel2.setPreferredSize(new java.awt.Dimension(390, 480));
+        jPanel2.setPreferredSize(new java.awt.Dimension(500, 480));
 
         jPanel1.setBackground(new java.awt.Color(20, 67, 122));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 67, 122), 2));
@@ -118,7 +118,7 @@ public class FRMLogin extends javax.swing.JDialog {
                 .addContainerGap(186, Short.MAX_VALUE))
         );
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("/home/luis/develop/lab/swing/sitel-app/sitel/images/logos/2-logo-tst.png")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon("/home/luis/develop/lab/swing/sitel-app/sitel/images/logos/3-logo-tst.png")); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -134,7 +134,7 @@ public class FRMLogin extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(162, 162, 162)
+                .addGap(137, 137, 137)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -143,7 +143,7 @@ public class FRMLogin extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
