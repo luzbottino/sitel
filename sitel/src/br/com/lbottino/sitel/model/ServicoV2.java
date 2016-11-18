@@ -74,7 +74,7 @@ public class ServicoV2 implements Serializable {
     @Column(name = "COD_TELEFONE_DESTINO", length = 10)
     private String codTelefoneDestino;
     @Column(name = "COD_CONJUGADOR_NUM_ORIGEM", length = 2)
-    private String codConjugadoNumOrigem;
+    private String codConjugadoNumDestino;
     @Column(name = "NUM_DURACAO_LIGACAO", precision = 5, scale = 1)
     private BigDecimal numDuracaoLigacao;
     @Temporal(value = TemporalType.TIME)
@@ -266,12 +266,12 @@ public class ServicoV2 implements Serializable {
         this.codTelefoneDestino = codTelefoneDestino;
     }
 
-    public String getCodConjugadoNumOrigem() {
-        return codConjugadoNumOrigem;
+    public String getCodConjugadoNumDestino() {
+        return codConjugadoNumDestino;
     }
 
-    public void setCodConjugadoNumOrigem(String codConjugadoNumOrigem) {
-        this.codConjugadoNumOrigem = codConjugadoNumOrigem;
+    public void setCodConjugadoNumDestino(String codConjugadoNumDestino) {
+        this.codConjugadoNumDestino = codConjugadoNumDestino;
     }
 
     public BigDecimal getNumDuracaoLigacao() {
@@ -370,7 +370,7 @@ public class ServicoV2 implements Serializable {
 
     @Override
     public String toString() {
-        return "ServicoV2{" + "codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", dtaVencimento=" + dtaVencimento + ", dtaEmissao=" + dtaEmissao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codCnlRecursoRef=" + codCnlRecursoRef + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codDegrau=" + codDegrau + ", dtaServico=" + dtaServico + ", codCnlDestino=" + codCnlDestino + ", nomLocalidadeDestino=" + nomLocalidadeDestino + ", codUfDestino=" + codUfDestino + ", codInternacionalNacional=" + codInternacionalNacional + ", codOperadora=" + codOperadora + ", descOperadora=" + descOperadora + ", codPaisDestino=" + codPaisDestino + ", codAreaDdd=" + codAreaDdd + ", codTelefoneDestino=" + codTelefoneDestino + ", codConjugadoNumOrigem=" + codConjugadoNumOrigem + ", numDuracaoLigacao=" + numDuracaoLigacao + ", horLigacao=" + horLigacao + ", nomGrupoCategoria=" + nomGrupoCategoria + ", descGrupoCategoria=" + descGrupoCategoria + ", nomCategoria=" + nomCategoria + ", descCategoria=" + descCategoria + ", codSinalValLigacao=" + codSinalValLigacao + ", valLigacao=" + valLigacao + ", codClasseServico=" + codClasseServico + '}';
+        return "ServicoV2{" + "codTipoRegistro=" + codTipoRegistro + ", codControleGravacao=" + codControleGravacao + ", dtaVencimento=" + dtaVencimento + ", dtaEmissao=" + dtaEmissao + ", codIdentUnicoRecurso=" + codIdentUnicoRecurso + ", codCnlRecursoRef=" + codCnlRecursoRef + ", codDdd=" + codDdd + ", codTelefone=" + codTelefone + ", nomRecurso=" + nomRecurso + ", codDegrau=" + codDegrau + ", dtaServico=" + dtaServico + ", codCnlDestino=" + codCnlDestino + ", nomLocalidadeDestino=" + nomLocalidadeDestino + ", codUfDestino=" + codUfDestino + ", codInternacionalNacional=" + codInternacionalNacional + ", codOperadora=" + codOperadora + ", descOperadora=" + descOperadora + ", codPaisDestino=" + codPaisDestino + ", codAreaDdd=" + codAreaDdd + ", codTelefoneDestino=" + codTelefoneDestino + ", codConjugadoNumOrigem=" + codConjugadoNumDestino + ", numDuracaoLigacao=" + numDuracaoLigacao + ", horLigacao=" + horLigacao + ", nomGrupoCategoria=" + nomGrupoCategoria + ", descGrupoCategoria=" + descGrupoCategoria + ", nomCategoria=" + nomCategoria + ", descCategoria=" + descCategoria + ", codSinalValLigacao=" + codSinalValLigacao + ", valLigacao=" + valLigacao + ", codClasseServico=" + codClasseServico + '}';
     }
 
 }

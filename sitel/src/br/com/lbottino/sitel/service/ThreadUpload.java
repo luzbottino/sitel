@@ -9,6 +9,7 @@ import br.com.lbottino.sitel.model.BilheteV2;
 import br.com.lbottino.sitel.model.EnderecoV2;
 import br.com.lbottino.sitel.model.HeaderV2;
 import br.com.lbottino.sitel.model.ResumoV2;
+import br.com.lbottino.sitel.model.ServicoV2;
 import br.com.lbottino.sitel.view.FRMPrincipal;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -77,6 +78,8 @@ public class ThreadUpload implements Runnable {
                         buildEndereco(line);
                     } else if (line.substring(0, 1).equals("3")) {
                         buildBilhete(line);
+                    } else if (line.substring(0, 1).equals("4")) {
+                        buildServico(line);
                     }
 
                     line = bufferedReader.readLine();
@@ -105,7 +108,7 @@ public class ThreadUpload implements Runnable {
         headerV2.setDtaVencimento(parseToDate(header.substring(133, 141)));
         headerV2.setDtaEmissao(parseToDate(header.substring(141, 149)));
 
-        System.out.println(headerV2.toString());
+        //System.out.println(headerV2.toString());
     }
 
     private void buildResumo(String resumo) throws ParseException {
@@ -147,7 +150,7 @@ public class ThreadUpload implements Runnable {
         resumoV2.setCodSinalValConta(resumo.charAt(300));
         resumoV2.setValConta(parseToBigDecimalVal(resumo.substring(301, 314)));
 
-        System.out.println(resumoV2.toString());
+        //System.out.println(resumoV2.toString());
     }
 
     private void buildEndereco(String endereco) {
@@ -174,7 +177,7 @@ public class ThreadUpload implements Runnable {
         enderecoV2.setDescComplementoB(endereco.substring(219, 229));
         enderecoV2.setDescBairroB(endereco.substring(229, 249));
 
-        System.out.println(enderecoV2.toString());
+        //System.out.println(enderecoV2.toString());
     }
 
     private void buildBilhete(String bilhete) throws ParseException {
@@ -214,9 +217,40 @@ public class ThreadUpload implements Runnable {
         bilheteV2.setValLigacaoComImposto(parseToBigDecimalVal(bilhete.substring(271, 284)));
         bilheteV2.setCodClasseServico(Integer.parseInt(bilhete.substring(284, 289)));
 
-        System.out.println(bilheteV2.toString());
+        //System.out.println(bilheteV2.toString());
     }
 
+    private void buildServico(String servico) throws ParseException {
+        ServicoV2 servicoV2 = new ServicoV2();
+        
+        //servicoV2.set(servico.substring(0, 0));
+        servicoV2.setCodTipoRegistro(servico.substring(0, 1));
+        servicoV2.setCodControleGravacao(servico.substring(1, 13));
+        servicoV2.setDtaVencimento(parseToDate(servico.substring(13, 21)));
+        servicoV2.setDtaEmissao(parseToDate(servico.substring(21, 29)));
+        servicoV2.setCodIdentUnicoRecurso(servico.substring(29, 54));
+        servicoV2.setCodCnlRecursoRef(Integer.parseInt(servico.substring(54, 59)));
+        servicoV2.setCodDdd(servico.substring(59, 61));
+        servicoV2.setCodTelefone(servico.substring(61, 71));
+        servicoV2.setNomRecurso(servico.substring(71, 86));
+        servicoV2.setDtaServico(parseToDate(servico.substring(86, 94)));
+        servicoV2.setCodCnlDestino(Integer.parseInt(servico.substring(94, 99)));
+        servicoV2.setNomLocalidadeDestino(servico.substring(99, 124));
+        servicoV2.setCodUfDestino(servico.substring(124, 126));
+        servicoV2.setCodInternacionalNacional(servico.substring(126, 128));
+        servicoV2.setCodOperadora(servico.substring(128, 130));
+        servicoV2.setDescOperadora(servico.substring(130, 150));
+        servicoV2.setCodPaisDestino(servico.substring(150, 153));
+        servicoV2.setCodAreaDdd(servico.substring(153, 157));
+        servicoV2.setCodTelefoneDestino(servico.substring(157, 167));
+        servicoV2.setCodConjugadoNumDestino(servico.substring(167, 169));
+        servicoV2.setNumDuracaoLigacao(parseToBigDecimalDuration(servico.substring(169, 175)));               
+        //servicoV2.set(servico.substring(0, 0));
+        
+        System.out.println(servicoV2.toString());
+        
+    }
+    
     private Date parseToDate(String dateFormat) throws ParseException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy" + "-" + "MM" + "-" + "dd");
@@ -269,5 +303,6 @@ public class ThreadUpload implements Runnable {
 
         return bigDecimal;
     }
+
 
 }

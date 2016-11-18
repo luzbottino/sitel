@@ -59,7 +59,6 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(254, 254, 254));
-        setPreferredSize(new java.awt.Dimension(900, 800));
         setResizable(false);
 
         pnlPrincipal.setBackground(new java.awt.Color(20, 67, 122));
@@ -160,7 +159,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
                 .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
@@ -175,8 +174,9 @@ public class FRMPrincipal extends javax.swing.JFrame {
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                .addComponent(pnlUploadFatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 4, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(pnlUploadFatura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel1.setBackground(new java.awt.Color(254, 254, 254));
@@ -203,7 +203,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
 
         mbPrincipal.setBackground(new java.awt.Color(254, 254, 254));
         mbPrincipal.setForeground(new java.awt.Color(254, 254, 254));
-        mbPrincipal.setPreferredSize(new java.awt.Dimension(275, 70));
+        mbPrincipal.setPreferredSize(new java.awt.Dimension(275, 30));
 
         mFinanceiro.setBackground(new java.awt.Color(205, 205, 205));
         mFinanceiro.setForeground(new java.awt.Color(82, 88, 92));
@@ -244,7 +244,7 @@ public class FRMPrincipal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+                .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
